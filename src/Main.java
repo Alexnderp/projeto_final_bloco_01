@@ -1,4 +1,6 @@
+import ecommerce.controller.ProductController;
 import ecommerce.model.Bike;
+import ecommerce.util.Functions;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -6,15 +8,17 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        ProductController products = new ProductController();
+        int id;
+        String name, description, tags, brand;
+        boolean onSale;
+        double price, discount;
         int option;
 
-        Bike bike = new Bike(21,"bike","uma bike aleatoria de teste",
-                "bike", 200,true,0.1,"Caloi");
-        bike.view();
 
         while (true) {
             System.out.print("""
-                    *********************************************************
+                    \n*********************************************************
                                         
                                         E-Commerce API
                                         
@@ -48,24 +52,88 @@ public class Main {
 
             switch (option) {
                 case 1 ->{
-                    System.out.println("Cadastar Produto");
+                    System.out.println("Informe o nome do Produto: ");
+                    sc.skip("\\R?");
+                    name = sc.nextLine();
+                    System.out.println("Informe a descrição do produto: ");
+                    description = sc.nextLine();
+                    System.out.println("Informe a tag do produto: ");
+                    tags = sc.nextLine();
+                    System.out.println("informe a marca do produto: ");
+                    brand = sc.nextLine();
+                    System.out.println("Informe o preço do produto: ");
+                    sc.skip("\\R?");
+                    price = sc.nextDouble();
+                    System.out.println("O produto está em promoção?");
+                    onSale = sc.nextBoolean();
+
+                    if(onSale){
+                        System.out.println("Informe o desconto que será aplicado:");
+                        discount = sc.nextDouble();
+                        products.register(new Bike(Functions.generateId(),name,description,tags,price,onSale,discount,brand));
+
+                    } else {
+                        discount = 0;
+                        products.register(new Bike(Functions.generateId(),name,description,tags,price,onSale,discount,brand));
+
+                    }
+
+
                 }
 
                 case 2 ->{
-                    System.out.println("Listar Produtos");
+                    System.out.println("Produtos Cadastrados: ");
+                    products.listAll();
                 }
 
                 case 3 ->{
-                    System.out.println("Filtrar Produto");
+                    System.out.println("Informe o nome do produto: ");
+                    sc.skip("\\R?");
+                    name = sc.nextLine();
+                    products.findByName(name);
                 }
 
                 case 4 ->{
-                    System.out.println("Atualizar Produto");
+                    System.out.println("Informe o ID do produto: ");
+                    id = sc.nextInt();
+
+                    var product = Functions.searchProductByID(id,products.getProducts());
+                    if (product != null){
+                        System.out.println("Informe o nome do Produto: ");
+                        sc.skip("\\R?");
+                        name = sc.nextLine();
+                        System.out.println("Informe a descrição do produto: ");
+                        description = sc.nextLine();
+                        System.out.println("Informe a tag do produto: ");
+                        tags = sc.nextLine();
+                        System.out.println("informe a marca do produto: ");
+                        brand = sc.nextLine();
+                        System.out.println("Informe o preço do produto: ");
+                        sc.skip("\\R?");
+                        price = sc.nextDouble();
+                        System.out.println("O produto está em promoção?");
+                        onSale = sc.nextBoolean();
+
+                        if(onSale){
+                            System.out.println("Informe o desconto que será aplicado:");
+                            discount = sc.nextDouble();
+                            products.update(new Bike(id,name,description,tags,price,onSale,discount,brand));
+                        } else {
+                            discount = 0;
+                            products.update(new Bike(id,name,description,tags,price,onSale,discount,brand));
+                        }
+                    } else {
+                        System.out.printf("O ID %d não foi encontrado", id);
+                    }
                 }
 
                 case 5 ->{
-                    System.out.println("Deletar Produto");
+                    System.out.println("Informe o ID do produto: ");
+                    id = sc.nextInt();
+                    products.delete(id);
                 }
+
+                default -> System.out.println("Opção inválida!");
 
             }
         }
