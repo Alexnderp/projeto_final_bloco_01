@@ -38,8 +38,11 @@ public class Bike extends Product{
 
     @Override
     public void view() {
+
         if(onSale){
-            System.out.printf("""
+            setPrice(getPrice() - (getPrice() * discount));
+        }
+        System.out.printf("""
                 ***********************************
                                 %s
                 ***********************************
@@ -55,6 +58,5 @@ public class Bike extends Product{
                 
                 ***********************************
                 """, getName(), getId(),brand, getDescription(), (getPrice() - (getPrice() * discount)), getTags());
-        }
     }
 }

@@ -26,10 +26,12 @@ public class Main {
                                         
                                    1 - Cadastrar Produto
                                    2 - Listar Todos as Produtos
-                                   3 - Filtrar Produto Pelo Nome
+                                   3 - Filtrar Produtos Pelo Nome
                                    4 - Atualizar Produto
                                    5 - Apagar Produto
-                                   6 - Sair
+                                   6 - Buscar Produto pelo ID
+                                   7 - Filtrar Produtos pela Tag
+                                   8 - Sair
                                    
                     *********************************************************
                     Entre com a opção desejada:
@@ -44,7 +46,7 @@ public class Main {
                 option = 0;
             }
 
-            if (option == 6) {
+            if (option == 8) {
                 System.out.println("Obrigado pela visita, Volte sempre");
                 sc.close();
                 System.exit(0);
@@ -70,15 +72,10 @@ public class Main {
                     if(onSale){
                         System.out.println("Informe o desconto que será aplicado:");
                         discount = sc.nextDouble();
-                        products.register(new Bike(Functions.generateId(),name,description,tags,price,onSale,discount,brand));
-
                     } else {
                         discount = 0;
-                        products.register(new Bike(Functions.generateId(),name,description,tags,price,onSale,discount,brand));
-
                     }
-
-
+                    products.register(new Bike(Functions.generateId(),name,description,tags,price,onSale,discount,brand));
                 }
 
                 case 2 ->{
@@ -131,6 +128,20 @@ public class Main {
                     System.out.println("Informe o ID do produto: ");
                     id = sc.nextInt();
                     products.delete(id);
+                }
+
+                case 6 ->{
+                    System.out.println("Informe o ID do produto: ");
+                    sc.skip("\\R?");
+                    id = sc.nextInt();
+                    products.findById(id);
+                }
+
+                case 7 ->{
+                    System.out.println("Informe a tag do produto: ");
+                    sc.skip("\\R?");
+                    tags = sc.nextLine();
+                    products.findByTag(tags);
                 }
 
                 default -> System.out.println("Opção inválida!");

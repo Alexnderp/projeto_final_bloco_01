@@ -16,11 +16,30 @@ public class ProductController implements ProductRepository {
 
     @Override
     public void findByName(String name) {
-        Product product = Functions.searchByName(name, products);
+        ArrayList<Product> results = Functions.searchByName(name, products);
+        if(!results.isEmpty()){
+            results.forEach(Product::view);
+        } else {
+            System.out.printf("\nNenhum produto %s não foi encontrado!", name);
+        }
+    }
+
+    @Override
+    public void findById(int id) {
+        Product product = Functions.searchProductByID(id,products);
         if(product != null){
             product.view();
         } else {
-            System.out.printf("\nO produto %s não foi encontrado!", name);
+            System.out.printf("\nO produto %d não foi encontrado", id);
+        }
+    }
+
+    public void findByTag(String tag){
+        ArrayList<Product> results = Functions.searchByTag(tag, products);
+        if(!results.isEmpty()){
+            results.forEach(Product::view);
+        } else {
+            System.out.printf("\nNenhum produto %s não foi encontrado!", tag);
         }
     }
 
